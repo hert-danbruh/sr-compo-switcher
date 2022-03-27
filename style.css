@@ -1,0 +1,13 @@
+body {
+    color: white;
+    font-family: monospace;
+    text-align: center;
+}
+
+#saveCode {
+    width: auto !important;
+}
+
+#saveCode table {
+    margin: 0 auto;
+}
