@@ -4615,6 +4615,27 @@ function drawUI(UI_mode){ // original name: Jf()
         backgroundFill(L+28*column,T+28*row,24,24,0x800000);
     }
     antiCheatCheck();
+
+    function switchComposOrHold({ stickmanSlot, inv }) {
+        let compo1DroppedPosition = Stickmen_Slots + stickmanSlot; 
+        let currentCompo = inv[compo1DroppedPosition];
+        let droppedClassCompo = getVal(Item_Inv[Inv_Last], Item_Class_ID) == Class_Compo;
+        let clickedACompoWhileHoldingNothing = currentCompo && !Item_Inv[Inv_Last]; 
+        if (droppedClassCompo) {
+            inv[compo1DroppedPosition] = Item_Inv[Inv_Last];
+            Item_Inv[Inv_Last] = currentCompo;
+            Comp1_Inv[Inv_Last] = 0;
+            Comp2_Inv[Inv_Last] = 0;
+            MP_Bar[stickmanSlot] = 0;
+        } else if (clickedACompoWhileHoldingNothing) {
+            inv[compo1DroppedPosition] = 0;
+            Item_Inv[Inv_Last] = currentCompo;
+            Comp1_Inv[Inv_Last] = 0;
+            Comp2_Inv[Inv_Last] = 0;
+            MP_Bar[stickmanSlot] = 0;
+        }
+    }
+
     if (0<=mouse_slot_pos && mouse_slot_pos<Stickmen_Slots && Item_Inv[Inv_Last]==0 && Clicked){
         Selected_Player = mouse_slot_pos;
     } else if (Stickmen_Slots<=mouse_slot_pos && mouse_slot_pos<Stickmen_Slots<<1 && Clicked){
@@ -4637,46 +4658,20 @@ function drawUI(UI_mode){ // original name: Jf()
         && Clicked
         && restrictSlots(mouse_slot_pos-8,0)
     ) { // compo row 1
-        let compo1DroppedPosition = Stickmen_Slots + mouse_slot_pos - (Stickmen_Slots << 1); 
-        let currentCompo1Item = Comp1_Inv[compo1DroppedPosition];
-        let droppedClassCompo = getVal(Item_Inv[Inv_Last], Item_Class_ID) == Class_Compo;
-        let clickedACompoWhileHoldingNothing = currentCompo1Item && !Item_Inv[Inv_Last]; 
-        if (droppedClassCompo) {
-            Comp1_Inv[compo1DroppedPosition] = Item_Inv[Inv_Last];
-            Item_Inv[Inv_Last] = currentCompo1Item;
-            Comp1_Inv[Inv_Last] = 0;
-            Comp2_Inv[Inv_Last] = 0;
-            MP_Bar[mouse_slot_pos-(Stickmen_Slots<<1)] = 0;
-        } else if (clickedACompoWhileHoldingNothing) {
-            Comp1_Inv[compo1DroppedPosition] = 0;
-            Item_Inv[Inv_Last] = currentCompo1Item;
-            Comp1_Inv[Inv_Last] = 0;
-            Comp2_Inv[Inv_Last] = 0;
-            MP_Bar[mouse_slot_pos-(Stickmen_Slots<<1)] = 0;
-        }
+        switchComposOrHold({
+            stickmanSlot: mouse_slot_pos - (Stickmen_Slots << 1),
+            inv: Comp1_Inv
+        })
     } else if (
         Stickmen_Slots*3<=mouse_slot_pos
         && mouse_slot_pos<Stickmen_Slots*4
         && Clicked
         && restrictSlots(mouse_slot_pos-12,1)
     ) { // compo row 2
-        let compo2DroppedPosition = Stickmen_Slots + mouse_slot_pos - Stickmen_Slots * 3; 
-        let currentCompo2Item = Comp2_Inv[compo2DroppedPosition];
-        let droppedCompoIntoSlot = getVal(Item_Inv[Inv_Last],Item_Class_ID) == Class_Compo;
-        let clickedCompoSlotWhileHoldingNothing = currentCompo2Item && !Item_Inv[Inv_Last]; 
-        if (droppedCompoIntoSlot) {
-            Comp2_Inv[compo2DroppedPosition] = Item_Inv[Inv_Last];
-            Item_Inv[Inv_Last] = currentCompo2Item;
-            Comp1_Inv[Inv_Last] = 0;
-            Comp2_Inv[Inv_Last] = 0;
-            MP_Bar[mouse_slot_pos-Stickmen_Slots*3] = 0;
-        } else if (clickedCompoSlotWhileHoldingNothing) {
-            Comp2_Inv[compo2DroppedPosition] = 0;
-            Item_Inv[Inv_Last] = currentCompo2Item;
-            Comp1_Inv[Inv_Last] = 0;
-            Comp2_Inv[Inv_Last] = 0;
-            MP_Bar[mouse_slot_pos-4] = 0;
-        }
+        switchComposOrHold({
+            stickmanSlot: mouse_slot_pos - Stickmen_Slots * 3,
+            inv: Comp2_Inv
+        })
     } else if (Inv_First<=mouse_slot_pos && mouse_slot_pos<Inv_Last && Clicked){ // inventory
         if (Click_To_Sell_Mode==1 && Item_Inv[mouse_slot_pos]!=0){
             sold_item = getVal(Item_Inv[mouse_slot_pos],Item_Buy_Price)>>3;
