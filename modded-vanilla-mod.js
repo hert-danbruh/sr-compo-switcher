@@ -4633,16 +4633,20 @@ function drawUI(UI_mode){ // original name: Jf()
         }
     } else if ((Stickmen_Slots<<1)<=mouse_slot_pos && mouse_slot_pos<Stickmen_Slots*3 && Clicked){ // compo row 1
         if (getVal(Item_Inv[Inv_Last],Item_Class_ID)==Class_Compo && restrictSlots(mouse_slot_pos-8,0)){
-            Comp1_Inv[Stickmen_Slots+mouse_slot_pos-(Stickmen_Slots<<1)] = Item_Inv[Inv_Last];
-            Item_Inv[Inv_Last] = 0;
+            var compo1DroppedPosition = Stickmen_Slots+mouse_slot_pos-(Stickmen_Slots<<1); 
+            var previousCompo1Item = Comp1_Inv[compo1DroppedPosition];
+            Comp1_Inv[compo1DroppedPosition] = Item_Inv[Inv_Last];
+            Item_Inv[Inv_Last] = previousCompo1Item;
             Comp1_Inv[Inv_Last] = 0;
             Comp2_Inv[Inv_Last] = 0;
             MP_Bar[mouse_slot_pos-(Stickmen_Slots<<1)] = 0;
         }
     } else if (Stickmen_Slots*3<=mouse_slot_pos && mouse_slot_pos<Stickmen_Slots*4 && Clicked){ // compo row 2
         if (getVal(Item_Inv[Inv_Last],Item_Class_ID)==Class_Compo && restrictSlots(mouse_slot_pos-12,1)){
-            Comp2_Inv[Stickmen_Slots+mouse_slot_pos-Stickmen_Slots*3] = Item_Inv[Inv_Last];
-            Item_Inv[Inv_Last] = 0;
+            var compo2DroppedPosition = Stickmen_Slots+mouse_slot_pos-Stickmen_Slots*3; 
+            var previousCompo2Item = Comp2_Inv[compo2DroppedPosition];
+            Comp2_Inv[compo2DroppedPosition] = Item_Inv[Inv_Last];
+            Item_Inv[Inv_Last] = previousCompo2Item;
             Comp1_Inv[Inv_Last] = 0;
             Comp2_Inv[Inv_Last] = 0;
             MP_Bar[mouse_slot_pos-Stickmen_Slots*3] = 0;
