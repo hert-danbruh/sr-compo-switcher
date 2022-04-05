@@ -12778,6 +12778,15 @@ var Bit_8_Color = new Uint8Array(My_Img_Data.data.buffer);   // original name: g
 //var of = setTimeout;                                         // of unused
 var Host_Name = "dan-ball.jp";                               // original name: zh zh=location.hostname;
 
+// ignore canvas scroll for mobile
+let ignoreEvent = function (event) {
+    event.preventDefault();
+}
+cv.addEventListener("touchstart", ignoreEvent)
+cv.addEventListener("touchmove", ignoreEvent)
+cv.addEventListener("touchend", ignoreEvent)
+cv.addEventListener("touchcancel", ignoreEvent)
+
 window.fff = putImageData;
 function putImageData(image_data,dx,dy){ // original name: Ah()
     try {
